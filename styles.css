@@ -70,11 +70,13 @@
   cursor: pointer;
   font-weight: 500;
   box-shadow: 0 14px 28px rgba(255, 255, 255, 0.25), 0 10px 10px rgba(255, 255, 255, 0.22);
+  text-shadow: 1px 1px 1px #000000;
   position: relative;
   transition: 0.2s;
 }
 
-.keyboard__row-key:hover {
+.keyboard__row-key:hover,
+.keyboard__row-key:active {
   color:rgb(0, 225, 255);
   border: 1px solid rgb(0, 225, 255);
   box-shadow: 0 14px 28px rgba(0, 255, 255, 0.25), 0 10px 10px rgba(0, 255, 255, 0.22);
@@ -97,4 +99,38 @@
 
 .enter {
   width: calc(var(--key-size) * 2);
+}
+
+.l-shift {
+  width: calc(var(--key-size) * 2.4);
+}
+
+.r-shift {
+  width: calc(var(--key-size) * 2.4);
+}
+
+.l-ctrl {
+  width: calc(var(--key-size) * 1.4);
+}
+
+.r-ctrl {
+  width: calc(var(--key-size) * 1.4);
+}
+
+.space {
+  width: calc(var(--key-size) * 8.4);
+}
+
+.arrow {
+  background-color: #818181;
+}
+
+.app-info {
+  width: 90%;
+  margin: 20px auto;
+  line-height: 26px;
+}
+
+.mark {
+  font-weight: 600;
 }
