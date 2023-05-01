@@ -179,12 +179,66 @@ class Keyboard {
 const keyboard = new Keyboard();
 keyboard.buildKeyboard('lower');
 
-// console.log(caps);
+function shiftDown(code) {
+  if (shift === true) return;
+  shift = true;
+  keyboard.buildKeyboard('shift');
+  setTimeout(() => {
+    keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
+  }, 20);
+}
+
+function shiftUp(code) {
+  shift = false;
+  keyboard.buildKeyboard('lower');
+  keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
+  setTimeout(() => {
+    keyboardContainer.querySelector(`#${code}`).classList.remove('keyboard__row-key_active');
+  }, 20);
+}
+
+function capsLock(code) {
+  if (caps === false) {
+    caps = true;
+    keyboard.buildKeyboard('caps');
+    setTimeout(() => {
+      keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
+    }, 20);
+  } else {
+    caps = false;
+    keyboard.buildKeyboard('lower');
+    keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
+    setTimeout(() => {
+      keyboardContainer.querySelector(`#${code}`).classList.remove('keyboard__row-key_active');
+    }, 20);
+  }
+}
 
 // Keyboard mouse listener
-keyboardContainer.addEventListener('click', (e) => {
+keyboardContainer.addEventListener('mousedown', (e) => {
   const clickTo = e.target.closest('.keyboard__row-key');
-  console.log(clickTo);
+  if (!clickTo) {
+    return;
+  }
+
+  if (clickTo.getAttribute('id') === 'ShiftLeft' || clickTo.getAttribute('id') === 'ShiftRight') {
+    shiftDown(clickTo.getAttribute('id'));
+  }
+
+  if (clickTo.getAttribute('id') === 'CapsLock') {
+    capsLock(clickTo.getAttribute('id'));
+  }
+});
+
+keyboardContainer.addEventListener('mouseup', (e) => {
+  const clickTo = e.target.closest('.keyboard__row-key');
+  if (!clickTo) {
+    return;
+  }
+
+  if (clickTo.getAttribute('id') === 'ShiftLeft' || clickTo.getAttribute('id') === 'ShiftRight') {
+    shiftUp(clickTo.getAttribute('id'));
+  }
 });
 
 // Phisical keyboard listeners
@@ -194,40 +248,15 @@ document.addEventListener('keydown', (e) => {
 
   e.preventDefault();
 
-  // For Shift
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    if (shift === true) return;
-    shift = true;
-    keyboard.buildKeyboard('shift');
-    setTimeout(() => {
-      keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
-    }, 20);
-    return;
+    shiftDown(e.code);
   }
 
-  // For Caps
   if (e.code === 'CapsLock') {
-    if (caps === false) {
-      caps = true;
-      keyboard.buildKeyboard('caps');
-      setTimeout(() => {
-        keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
-      }, 20);
-    } else {
-      caps = false;
-      keyboard.buildKeyboard('lower');
-      keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
-      setTimeout(() => {
-        keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
-      }, 20);
-    }
-    return;
+    capsLock(e.code);
   }
 
   keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
-
-  // console.log(e.code);
-  // console.log(e.key);
 });
 
 document.addEventListener('keyup', (e) => {
@@ -236,13 +265,7 @@ document.addEventListener('keyup', (e) => {
   if (e.code === 'CapsLock') return;
 
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
-    shift = false;
-    keyboard.buildKeyboard('lower');
-    keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
-    setTimeout(() => {
-      keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
-    }, 20);
-    return;
+    shiftUp(e.code);
   }
 
   keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
