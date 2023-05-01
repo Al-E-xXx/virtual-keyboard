@@ -12,6 +12,7 @@ setFavicons('./favicon.ico');
 // General vars
 let caps = false;
 let shift = false;
+let ru = false;
 
 // Base html-tags
 const bodyTag = document.body;
@@ -94,11 +95,11 @@ class Keyboard {
     // Clear container
     keyboardContainer.innerHTML = '';
 
-    if (!param || param === 'enLower') {
+    if (!param || param === 'lower') {
       layout = this.enLower;
-    } else if (param === 'enShift') {
+    } else if (param === 'shift') {
       layout = this.enShift;
-    } else if (param === 'enCaps') {
+    } else if (param === 'caps') {
       layout = this.enCaps;
     }
 
@@ -176,7 +177,7 @@ class Keyboard {
 }
 
 const keyboard = new Keyboard();
-keyboard.buildKeyboard('enLower');
+keyboard.buildKeyboard('lower');
 
 // console.log(caps);
 
@@ -194,7 +195,7 @@ document.addEventListener('keydown', (e) => {
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
     if (shift === true) return;
     shift = true;
-    keyboard.buildKeyboard('enShift');
+    keyboard.buildKeyboard('shift');
     setTimeout(() => {
       keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
     }, 20);
@@ -205,12 +206,17 @@ document.addEventListener('keydown', (e) => {
   if (e.code === 'CapsLock') {
     if (caps === false) {
       caps = true;
-      keyboard.buildKeyboard('enCaps');
-      keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
+      keyboard.buildKeyboard('caps');
+      setTimeout(() => {
+        keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
+      }, 20);
     } else {
       caps = false;
-      keyboard.buildKeyboard('enLower');
-      keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
+      keyboard.buildKeyboard('lower');
+      keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
+      setTimeout(() => {
+        keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
+      }, 20);
     }
     return;
   }
@@ -225,7 +231,7 @@ document.addEventListener('keyup', (e) => {
   if (e.code === 'CapsLock') return;
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
     shift = false;
-    keyboard.buildKeyboard('enLower');
+    keyboard.buildKeyboard('lower');
     keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
     setTimeout(() => {
       keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
