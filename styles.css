@@ -77,7 +77,8 @@
 
 .keyboard__row-key:hover,
 .keyboard__row-key:active,
-.keyboard__row-key_active {
+.keyboard__row-key_active,
+.arrow.keyboard__row-key_active {
   color:rgb(0, 225, 255);
   border: 1px solid rgb(0, 225, 255);
   box-shadow: 0 14px 28px rgba(0, 255, 255, 0.25), 0 10px 10px rgba(0, 255, 255, 0.22);
@@ -85,7 +86,8 @@
 }
 
 .keyboard__row-key:active,
-.keyboard__row-key_active {
+.keyboard__row-key_active,
+.arrow.keyboard__row-key_active {
   border-radius: calc(var(--key-size) / 2);
 }
 

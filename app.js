@@ -7,7 +7,7 @@ function setFavicons(favImg) {
   headTitle.appendChild(setFavicon);
 }
 
-setFavicons('./favicon.ico');
+setFavicons('https://rs.school/favicon.ico');
 
 // General vars
 let caps = false;
@@ -189,6 +189,9 @@ keyboardContainer.addEventListener('click', (e) => {
 
 // Phisical keyboard listeners
 document.addEventListener('keydown', (e) => {
+  // Exclude extra keys
+  if (!keyboard.keyIds.includes(e.code)) return;
+
   e.preventDefault();
 
   // For Shift
@@ -228,7 +231,10 @@ document.addEventListener('keydown', (e) => {
 });
 
 document.addEventListener('keyup', (e) => {
+  // Exclude extra keys
+  if (!keyboard.keyIds.includes(e.code)) return;
   if (e.code === 'CapsLock') return;
+
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
     shift = false;
     keyboard.buildKeyboard('lower');
