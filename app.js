@@ -12,7 +12,7 @@ setFavicons('https://rs.school/favicon.ico');
 // General vars
 let caps = false;
 let shift = false;
-let ru = false;
+// let ru = false;
 
 // Base html-tags
 const bodyTag = document.body;
@@ -214,7 +214,28 @@ function capsLock(code) {
   }
 }
 
-// Keyboard mouse listener
+function printSymbol(code) {
+  const notSymbols = [
+    'Backspace', 'Delete', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'ControlLeft',
+    'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight',
+  ];
+
+  const symbol = keyboardContainer.querySelector(`#${code}`);
+
+  if (!notSymbols.includes(code)) {
+    if (code === 'Space') {
+      textarea.value += ' ';
+    } else if (code === 'Enter') {
+      textarea.value += '\n';
+    } else if (code === 'Tab') {
+      textarea.value += '\t';
+    } else {
+      textarea.value += symbol.innerText;
+    }
+  }
+}
+
+// Mouse listener
 keyboardContainer.addEventListener('mousedown', (e) => {
   const clickTo = e.target.closest('.keyboard__row-key');
   if (!clickTo) {
@@ -228,6 +249,8 @@ keyboardContainer.addEventListener('mousedown', (e) => {
   if (clickTo.getAttribute('id') === 'CapsLock') {
     capsLock(clickTo.getAttribute('id'));
   }
+
+  printSymbol(clickTo.getAttribute('id'));
 });
 
 keyboardContainer.addEventListener('mouseup', (e) => {
@@ -257,6 +280,8 @@ document.addEventListener('keydown', (e) => {
   }
 
   keyboardContainer.querySelector(`#${e.code}`).classList.add('keyboard__row-key_active');
+
+  printSymbol(e.code);
 });
 
 document.addEventListener('keyup', (e) => {
