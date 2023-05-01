@@ -215,23 +215,28 @@ function capsLock(code) {
 }
 
 function printSymbol(code) {
+  let textVal = textarea.value;
   const notSymbols = [
     'Backspace', 'Delete', 'CapsLock', 'ShiftLeft', 'ShiftRight', 'ControlLeft',
     'MetaLeft', 'AltLeft', 'AltRight', 'ControlRight',
   ];
-
+  const cursorPos = textarea.selectionStart;
   const symbol = keyboardContainer.querySelector(`#${code}`);
+  const startStr = textVal.slice(0, cursorPos);
+  const finishStr = textVal.slice(cursorPos);
 
   if (!notSymbols.includes(code)) {
     if (code === 'Space') {
-      textarea.value += ' ';
+      textVal = `${startStr} ${finishStr}`;
     } else if (code === 'Enter') {
-      textarea.value += '\n';
+      textVal = `${startStr}\n${finishStr}`;
     } else if (code === 'Tab') {
-      textarea.value += '\t';
+      textVal = `${startStr}\t${finishStr}`;
     } else {
-      textarea.value += symbol.innerText;
+      textVal = `${startStr}${symbol.innerText}${finishStr}`;
     }
+    textarea.value = textVal;
+    textarea.selectionStart = cursorPos + 1;
   }
 }
 
