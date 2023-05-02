@@ -12,7 +12,8 @@ setFavicons('https://rs.school/favicon.ico');
 // General vars
 let caps = false;
 let shift = false;
-// let ru = false;
+let ru = false;
+let keyType = 'lower';
 
 // Base html-tags
 const bodyTag = document.body;
@@ -85,6 +86,30 @@ class Keyboard {
       '⇧', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/', '↑', '⇧',
       'Ctrl', '⊞', 'Alt', ' ', 'Alt', '←', '↓', '→', 'Ctrl',
     ];
+
+    this.ruLower = [
+      'ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '⌫',
+      'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'Del',
+      'Caps', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', '↵',
+      '⇧', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '↑', '⇧',
+      'Ctrl', '⊞', 'Alt', ' ', 'Alt', '←', '↓', '→', 'Ctrl',
+    ];
+
+    this.ruShift = [
+      'Ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', '⌫',
+      'Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '/', 'Del',
+      'Caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', '↵',
+      '⇧', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', '↑', '⇧',
+      'Ctrl', '⊞', 'Alt', ' ', 'Alt', '←', '↓', '→', 'Ctrl',
+    ];
+
+    this.ruCaps = [
+      'Ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', '⌫',
+      'Tab', 'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х', 'Ъ', '/', 'Del',
+      'Caps', 'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э', '↵',
+      '⇧', 'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', ',', '↑', '⇧',
+      'Ctrl', '⊞', 'Alt', ' ', 'Alt', '←', '↓', '→', 'Ctrl',
+    ];
   }
 
   buildKeyboard(param) {
@@ -96,11 +121,23 @@ class Keyboard {
     keyboardContainer.innerHTML = '';
 
     if (!param || param === 'lower') {
-      layout = this.enLower;
+      if (ru === true) {
+        layout = this.ruLower;
+      } else {
+        layout = this.enLower;
+      }
     } else if (param === 'shift') {
-      layout = this.enShift;
+      if (ru === true) {
+        layout = this.ruShift;
+      } else {
+        layout = this.enShift;
+      }
     } else if (param === 'caps') {
-      layout = this.enCaps;
+      if (ru === true) {
+        layout = this.ruCaps;
+      } else {
+        layout = this.enCaps;
+      }
     }
 
     for (let i = 0; i < this.keyIds.length; i += 1) {
@@ -177,12 +214,12 @@ class Keyboard {
 }
 
 const keyboard = new Keyboard();
-keyboard.buildKeyboard('lower');
+keyboard.buildKeyboard(keyType);
 
 function shiftDown(code) {
   if (shift === true) return;
   shift = true;
-  keyboard.buildKeyboard('shift');
+  keyboard.buildKeyboard(keyType);
   setTimeout(() => {
     keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
   }, 20);
@@ -190,7 +227,7 @@ function shiftDown(code) {
 
 function shiftUp(code) {
   shift = false;
-  keyboard.buildKeyboard('lower');
+  keyboard.buildKeyboard(keyType);
   keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
   setTimeout(() => {
     keyboardContainer.querySelector(`#${code}`).classList.remove('keyboard__row-key_active');
@@ -200,13 +237,15 @@ function shiftUp(code) {
 function capsLock(code) {
   if (caps === false) {
     caps = true;
-    keyboard.buildKeyboard('caps');
+    keyType = 'caps';
+    keyboard.buildKeyboard(keyType);
     setTimeout(() => {
       keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
     }, 20);
   } else {
     caps = false;
-    keyboard.buildKeyboard('lower');
+    keyType = 'lower';
+    keyboard.buildKeyboard(keyType);
     keyboardContainer.querySelector(`#${code}`).classList.add('keyboard__row-key_active');
     setTimeout(() => {
       keyboardContainer.querySelector(`#${code}`).classList.remove('keyboard__row-key_active');
@@ -259,6 +298,7 @@ keyboardContainer.addEventListener('mousedown', (e) => {
   }
 
   if (clickTo.getAttribute('id') === 'ShiftLeft' || clickTo.getAttribute('id') === 'ShiftRight') {
+    keyType = 'shift';
     shiftDown(clickTo.getAttribute('id'));
   }
 
@@ -276,18 +316,40 @@ keyboardContainer.addEventListener('mouseup', (e) => {
   }
 
   if (clickTo.getAttribute('id') === 'ShiftLeft' || clickTo.getAttribute('id') === 'ShiftRight') {
+    keyType = 'lower';
     shiftUp(clickTo.getAttribute('id'));
   }
 });
 
 // Phisical keyboard listeners
+const pressed = new Set();
 document.addEventListener('keydown', (e) => {
   // Exclude extra keys
   if (!keyboard.keyIds.includes(e.code)) return;
 
+  // Ctrl + Alt (ru / en)
+  pressed.add(e.code);
+  if (pressed.has('ControlLeft') && pressed.has('AltLeft')) {
+    if (ru === false) {
+      ru = true;
+    } else {
+      ru = false;
+    }
+
+    keyboard.buildKeyboard(keyType);
+    setTimeout(() => {
+      keyboardContainer.querySelector('#ControlLeft').classList.add('keyboard__row-key_active');
+      keyboardContainer.querySelector('#AltLeft').classList.add('keyboard__row-key_active');
+    }, 20);
+
+    pressed.clear();
+    return;
+  }
+
   e.preventDefault();
 
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+    keyType = 'shift';
     shiftDown(e.code);
   }
 
@@ -305,12 +367,12 @@ document.addEventListener('keyup', (e) => {
   if (!keyboard.keyIds.includes(e.code)) return;
   if (e.code === 'CapsLock') return;
 
+  pressed.delete(e.code);
+
   if (e.code === 'ShiftLeft' || e.code === 'ShiftRight') {
+    keyType = 'lower';
     shiftUp(e.code);
   }
 
   keyboardContainer.querySelector(`#${e.code}`).classList.remove('keyboard__row-key_active');
-  // pressed.delete(e.code);
 });
-
-// keyboardContainer.querySelector('#CapsLock').classList.add('test');
