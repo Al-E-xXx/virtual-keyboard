@@ -12,8 +12,11 @@ setFavicons('https://rs.school/favicon.ico');
 // General vars
 let caps = false;
 let shift = false;
-let ru = false;
 let keyType = 'lower';
+let lang = 'en';
+if (localStorage.getItem('lang')) {
+  lang = localStorage.getItem('lang');
+}
 
 // Base html-tags
 const bodyTag = document.body;
@@ -121,19 +124,19 @@ class Keyboard {
     keyboardContainer.innerHTML = '';
 
     if (!param || param === 'lower') {
-      if (ru === true) {
+      if (lang === 'ru') {
         layout = this.ruLower;
       } else {
         layout = this.enLower;
       }
     } else if (param === 'shift') {
-      if (ru === true) {
+      if (lang === 'ru') {
         layout = this.ruShift;
       } else {
         layout = this.enShift;
       }
     } else if (param === 'caps') {
-      if (ru === true) {
+      if (lang === 'ru') {
         layout = this.ruCaps;
       } else {
         layout = this.enCaps;
@@ -330,10 +333,12 @@ document.addEventListener('keydown', (e) => {
   // Ctrl + Alt (ru / en)
   pressed.add(e.code);
   if (pressed.has('ControlLeft') && pressed.has('AltLeft')) {
-    if (ru === false) {
-      ru = true;
+    if (lang === 'en') {
+      lang = 'ru';
+      localStorage.setItem('lang', 'ru');
     } else {
-      ru = false;
+      lang = 'en';
+      localStorage.setItem('lang', 'en');
     }
 
     keyboard.buildKeyboard(keyType);
