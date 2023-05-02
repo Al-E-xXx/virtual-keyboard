@@ -218,6 +218,7 @@ class Keyboard {
 
 const keyboard = new Keyboard();
 keyboard.buildKeyboard(keyType);
+textarea.focus();
 
 function shiftDown(code) {
   if (shift === true) return;
@@ -281,6 +282,7 @@ function printSymbol(code) {
     textarea.selectionStart = cursorPos + 1;
     textarea.selectionEnd = cursorPos + 1;
   } else if (code === 'Backspace') {
+    if (cursorPos === 0) return;
     textVal = startStr.slice(0, -1) + finishStr;
     textarea.value = textVal;
     textarea.selectionStart = cursorPos - 1;
@@ -312,7 +314,8 @@ keyboardContainer.addEventListener('mousedown', (e) => {
   printSymbol(clickTo.getAttribute('id'));
 });
 
-keyboardContainer.addEventListener('mouseup', (e) => {
+document.addEventListener('mouseup', (e) => {
+  textarea.focus();
   const clickTo = e.target.closest('.keyboard__row-key');
   if (!clickTo) {
     return;
