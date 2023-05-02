@@ -282,12 +282,32 @@ function printSymbol(code) {
     textarea.selectionStart = cursorPos + 1;
     textarea.selectionEnd = cursorPos + 1;
   } else if (code === 'Backspace') {
+    if (textarea.selectionStart < textarea.selectionEnd) {
+      textVal = startStr + finishStr;
+      const leftStr = textVal.slice(0, textarea.selectionStart);
+      const rightStr = textVal.slice(textarea.selectionEnd);
+      textVal = leftStr + rightStr;
+      textarea.value = textVal;
+      textarea.selectionStart = cursorPos;
+      textarea.selectionEnd = cursorPos;
+      return;
+    }
     if (cursorPos === 0) return;
     textVal = startStr.slice(0, -1) + finishStr;
     textarea.value = textVal;
     textarea.selectionStart = cursorPos - 1;
     textarea.selectionEnd = cursorPos - 1;
   } else if (code === 'Delete') {
+    if (textarea.selectionStart < textarea.selectionEnd) {
+      textVal = startStr + finishStr;
+      const leftStr = textVal.slice(0, textarea.selectionStart);
+      const rightStr = textVal.slice(textarea.selectionEnd);
+      textVal = leftStr + rightStr;
+      textarea.value = textVal;
+      textarea.selectionStart = cursorPos;
+      textarea.selectionEnd = cursorPos;
+      return;
+    }
     textVal = startStr + finishStr.slice(1);
     textarea.value = textVal;
     textarea.selectionStart = cursorPos;
