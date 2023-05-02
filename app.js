@@ -237,6 +237,17 @@ function printSymbol(code) {
     }
     textarea.value = textVal;
     textarea.selectionStart = cursorPos + 1;
+    textarea.selectionEnd = cursorPos + 1;
+  } else if (code === 'Backspace') {
+    textVal = startStr.slice(0, -1) + finishStr;
+    textarea.value = textVal;
+    textarea.selectionStart = cursorPos - 1;
+    textarea.selectionEnd = cursorPos - 1;
+  } else if (code === 'Delete') {
+    textVal = startStr + finishStr.slice(1);
+    textarea.value = textVal;
+    textarea.selectionStart = cursorPos;
+    textarea.selectionEnd = cursorPos;
   }
 }
 
