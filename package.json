@@ -18,7 +18,7 @@
   "bugs": {
     "url": "https://github.com/Al-E-xXx/virtual-keyboard/issues"
   },
-  "homepage": "https://github.com/Al-E-xXx/virtual-keyboard#readme",
+  "homepage": "https://al-e-xxx.github.io/virtual-keyboard/",
   "devDependencies": {
     "eslint": "^8.39.0",
     "eslint-config-airbnb-base": "^15.0.0",
